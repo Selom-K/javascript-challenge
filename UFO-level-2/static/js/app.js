@@ -27,3 +27,42 @@ function deleteTbody() {
 console.log(tableData);
 tableDisplay(tableData);
 
+// Filtering
+var button = d3.select("#filter-btn");
+
+// Display
+button.on("click", function(event) {
+  
+  d3.event.preventDefault();
+  deleteTbody();
+  
+  var filteredData = tableData;
+  var inputId = document.getElementsByClassName("form-control");
+  
+  // Input fields
+  for (var i = 0; i < inputId.length; i++) {
+	
+	var idName = inputId[i].id;
+	var field = d3.select("#" + idName).property("value");
+	
+
+	if (field.trim() !== "") {
+	  var filteredData = filteredData.filter(ufoEvents =>
+		ufoEvents[idName].toUpperCase().trim() ===
+		field.toUpperCase().trim());
+	};
+  };
+ 
+  // If there is no record, display
+  if (filteredData.length == 0) {
+    d3.select("tbody")
+      .append("tr")
+      .append("td")
+        .attr("colspan", 7)
+        .html("<h4>No Records to Show</h4>");
+  };
+  
+  // Show table records
+  console.log(filteredData);
+  tableDisplay(filteredData);
+});
